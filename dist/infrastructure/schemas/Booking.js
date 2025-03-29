@@ -29,4 +29,3 @@ const BookingSchema = new mongoose_1.default.Schema({
 });
 const Booking = mongoose_1.default.model("Booking", BookingSchema);
 exports.default = Booking;
-//# sourceMappingURL=Booking.js.map

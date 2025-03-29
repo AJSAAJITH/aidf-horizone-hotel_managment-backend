@@ -36,4 +36,3 @@ const HotelSchema = new mongoose_1.default.Schema({
 });
 const Hotel = mongoose_1.default.model("Hotel", HotelSchema);
 exports.default = Hotel;
-//# sourceMappingURL=Hotel.js.map

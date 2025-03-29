@@ -10,4 +10,3 @@ const bookingsRouter = express_1.default.Router();
 bookingsRouter.route("/").get(booking_1.getAllBookings).post(authentication_middleware_1.isAuthenticated, booking_1.createBooking);
 bookingsRouter.route("/hotels/:hotelId").get(booking_1.getAllBookingsForHotel);
 exports.default = bookingsRouter;
-//# sourceMappingURL=booking.js.map

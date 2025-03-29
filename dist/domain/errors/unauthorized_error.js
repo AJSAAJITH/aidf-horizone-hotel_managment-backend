@@ -7,4 +7,3 @@ class UnauthorizedError extends Error {
     }
 }
 exports.default = UnauthorizedError;
-//# sourceMappingURL=unauthorized_error.js.map

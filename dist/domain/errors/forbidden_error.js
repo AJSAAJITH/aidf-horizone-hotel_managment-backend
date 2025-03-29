@@ -7,4 +7,3 @@ class ForbiddenError extends Error {
     }
 }
 exports.default = ForbiddenError;
-//# sourceMappingURL=forbidden_error.js.map

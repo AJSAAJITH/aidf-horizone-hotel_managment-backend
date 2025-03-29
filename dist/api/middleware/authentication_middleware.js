@@ -6,10 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthenticated = void 0;
 const unauthorized_error_1 = __importDefault(require("../../domain/errors/unauthorized_error"));
 const isAuthenticated = (req, res, next) => {
-    if (!req?.auth.userId) {
+    if (!(req === null || req === void 0 ? void 0 : req.auth.userId)) {
         throw new unauthorized_error_1.default("Unauthorized");
     }
     next();
 };
 exports.isAuthenticated = isAuthenticated;
-//# sourceMappingURL=authentication_middleware.js.map

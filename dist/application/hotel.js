@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -116,12 +125,12 @@ const openai_1 = __importDefault(require("openai"));
 // ];
 // The below are request handler functions
 // create hotel - {{baseUrl}}/api/hotels/
-const genarateResponce = async (req, res, next) => {
-    const { prompt } = req?.body;
+const genarateResponce = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { prompt } = req === null || req === void 0 ? void 0 : req.body;
     const client = new openai_1.default({
         apiKey: process.env.OPENAI_API_KEY,
     });
-    const completion = await client.chat.completions.create({
+    const completion = yield client.chat.completions.create({
         model: "gpt-4o",
         messages: [
             {
@@ -140,16 +149,16 @@ const genarateResponce = async (req, res, next) => {
         }
     });
     return;
-};
+});
 exports.genarateResponce = genarateResponce;
-const createHotel = async (req, res, next) => {
+const createHotel = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const hotel = hotel_1.createHotelDTO.safeParse(req.body);
         if (!hotel.success) {
             throw new not_found_error_1.default("Invalid hotel data");
         }
         // Add the hotel
-        const hoteldata = await Hotel_1.default.create({
+        const hoteldata = yield Hotel_1.default.create({
             name: hotel.data.name,
             location: hotel.data.location,
             image: hotel.data.image,
@@ -163,14 +172,14 @@ const createHotel = async (req, res, next) => {
     catch (error) {
         next(error);
     }
-};
+});
 exports.createHotel = createHotel;
 // promise sleep function
 // const sleep = (ms)=> new Promise((resolve)=>setTimeout(resolve, ms));
 // getAll hotels -get {{baseUrl}}/api/hotels/
-const getAllHotels = async (req, res, next) => {
+const getAllHotels = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const hotels = await Hotel_1.default.find();
+        const hotels = yield Hotel_1.default.find();
         // await sleep(5000);
         res.status(200).json({ length: hotels.length, data: hotels });
         return;
@@ -178,14 +187,14 @@ const getAllHotels = async (req, res, next) => {
     catch (error) {
         next(error);
     }
-};
+});
 exports.getAllHotels = getAllHotels;
 // post middleware
 // get hotel by id: -get {{baseUrl}}/api/hotels/67acda2277e1b687533ec5b1
-const getHotelById = async (req, res, next) => {
+const getHotelById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const hotelId = req.params.id;
-        const hotel = await Hotel_1.default.findById(hotelId);
+        const hotel = yield Hotel_1.default.findById(hotelId);
         if (!hotel) {
             throw new not_found_error_1.default("Invalid hotel data");
         }
@@ -195,10 +204,10 @@ const getHotelById = async (req, res, next) => {
     catch (error) {
         next(error);
     }
-};
+});
 exports.getHotelById = getHotelById;
 // update hotels :id - put - 
-const updateHotel = async (req, res, next) => {
+const updateHotel = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const hotelId = req.params.id; // Assuming the hotel ID is passed as a URL parameter
     const updatedHotel = req.body;
     // Validate the request data
@@ -213,7 +222,7 @@ const updateHotel = async (req, res, next) => {
     }
     try {
         // Update the hotel
-        const updatedData = await Hotel_1.default.findByIdAndUpdate(hotelId, // The ID of the document to update
+        const updatedData = yield Hotel_1.default.findByIdAndUpdate(hotelId, // The ID of the document to update
         updatedHotel, // The data to update
         { new: true } // Return the updated document
         );
@@ -229,14 +238,14 @@ const updateHotel = async (req, res, next) => {
         // res.status(500).json({ success: false, message: "Internal server error." });
         next(error);
     }
-};
+});
 exports.updateHotel = updateHotel;
 // delete hotels :id - delete -
-const deleteHotel = async (req, res, next) => {
+const deleteHotel = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const hotelId = req.params.id;
         // Delete the hotel
-        await Hotel_1.default.findByIdAndDelete(hotelId);
+        yield Hotel_1.default.findByIdAndDelete(hotelId);
         // Return the response
         res.status(200).json({ success: true, message: "hotel deleted successful" });
         return;
@@ -244,6 +253,5 @@ const deleteHotel = async (req, res, next) => {
     catch (error) {
         next(error);
     }
-};
+});
 exports.deleteHotel = deleteHotel;
-//# sourceMappingURL=hotel.js.map

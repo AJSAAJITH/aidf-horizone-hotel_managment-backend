@@ -8,4 +8,3 @@ exports.createBookingDTO = zod_1.z.object({
     checkOut: zod_1.z.string(),
     roomNumber: zod_1.z.number()
 });
-//# sourceMappingURL=booking.js.map

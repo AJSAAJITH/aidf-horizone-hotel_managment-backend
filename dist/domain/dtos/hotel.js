@@ -10,4 +10,3 @@ exports.createHotelDTO = zod_1.z.object({
     price: zod_1.z.number(),
     description: zod_1.z.string()
 });
-//# sourceMappingURL=hotel.js.map

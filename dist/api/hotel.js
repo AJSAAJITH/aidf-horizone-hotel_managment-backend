@@ -23,4 +23,3 @@ hotelsRouter.route('/llm').post(hotel_1.genarateResponce);
 hotelsRouter.route('/emberdding/create').post(embedding_1.createEmberdding);
 hotelsRouter.route('/search/retrieve').get(retrieveIndexes_1.retrieve);
 exports.default = hotelsRouter;
-//# sourceMappingURL=hotel.js.map

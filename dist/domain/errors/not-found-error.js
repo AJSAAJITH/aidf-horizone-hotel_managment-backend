@@ -7,4 +7,3 @@ class ValidateError extends Error {
     }
 }
 exports.default = ValidateError;
-//# sourceMappingURL=not-found-error.js.map

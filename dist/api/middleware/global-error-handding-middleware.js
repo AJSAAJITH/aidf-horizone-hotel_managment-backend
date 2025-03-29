@@ -21,4 +21,3 @@ const globleErrorHandilngMiddleware = (error, req, res, next) => {
     res.status(500).json({ message: "Internal Server Error" });
 };
 exports.default = globleErrorHandilngMiddleware;
-//# sourceMappingURL=global-error-handding-middleware.js.map

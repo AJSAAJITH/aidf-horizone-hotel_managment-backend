@@ -8,4 +8,3 @@ const user_1 = require("../application/user");
 const usersRouter = express_1.default.Router();
 usersRouter.route("/").post(user_1.createUser).get(user_1.getAllUsers);
 exports.default = usersRouter;
-//# sourceMappingURL=user.js.map
