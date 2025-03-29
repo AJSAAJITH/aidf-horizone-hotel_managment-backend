@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var globleErrorHandilngMiddleware = function (error, req, res, next) {
+const globleErrorHandilngMiddleware = (error, req, res, next) => {
     console.log(error);
     if (error.name === "NotFoundError") {
         res.status(404).json({ error: error.message });
