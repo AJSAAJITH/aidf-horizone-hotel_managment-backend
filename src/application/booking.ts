@@ -51,7 +51,8 @@ export const getAllBookingsForHotel = async (req: Request, res: Response, next: 
 
   // Validate hotelId
   if (!mongoose.Types.ObjectId.isValid(hotelId)) {
-    return res.status(400).json({ message: "Invalid hotel ID" });
+    res.status(400).json({ message: "Invalid hotel ID" });
+    return;
   }
 
   try {

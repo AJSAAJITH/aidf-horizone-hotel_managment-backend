@@ -161,7 +161,7 @@ export const createHotel = async (req: Request, res: Response, next: NextFunctio
       name: hotel.data.name,
       location: hotel.data.location,
       image: hotel.data.image,
-      price: parseInt(hotel.data.price),
+      price: Number(hotel.data.price),
       description: hotel.data.description,
     });
 
