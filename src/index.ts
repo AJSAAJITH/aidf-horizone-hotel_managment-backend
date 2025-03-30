@@ -16,7 +16,8 @@ app.use(clerkMiddleware())
 
 // Middleware to parse JSON data in the request body
 app.use(express.json());
-app.use(cors({ origin: "https://aidf-horizone-frontend-saajith.netlify.app" }));
+// app.use(cors({ origin: "https://aidf-horizone-frontend-saajith.netlify.app" }));
+app.use(cors());
 
 
 app.use("/api/hotels", hotelsRouter);
