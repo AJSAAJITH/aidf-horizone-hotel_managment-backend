@@ -72,3 +72,21 @@ export const getAllBookingsForHotel = async (req: Request, res: Response, next: 
     next(error);
   }
 };
+
+export const getBookingById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const bookingId = req.params.bookingId;
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      throw new ValidateError("Booking not found");
+    }
+    res.status(200).json(booking);
+    return;
+  } catch (error) {
+    next(error);
+  }
+}

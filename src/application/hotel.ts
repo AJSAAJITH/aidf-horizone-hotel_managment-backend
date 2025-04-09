@@ -3,6 +3,7 @@ import ValidateError from "../domain/errors/not-found-error";
 import Hotel from "../infrastructure/schemas/Hotel";
 import { NextFunction, Request, Response } from "express";
 import OpenAI from "openai";
+import stripe from "../infrastructure/stripe";
 // const hotels = [
 // {
 //   _id: "1",
@@ -150,19 +151,32 @@ export const genarateResponce = async (req: Request, res: Response, next: NextFu
 export const createHotel = async (req: Request, res: Response, next: NextFunction) => {
   try {
 
-    const hotel = createHotelDTO.safeParse(req.body);
+    const validationResult = createHotelDTO.safeParse(req.body);
 
-    if (!hotel.success) {
+    if (!validationResult.success) {
       throw new ValidateError("Invalid hotel data");
     }
 
-    // Add the hotel
+    const hotel = validationResult.data;
+
+    // Create a product in stripe
+    const stripeProduct = await stripe.products.create({
+      name: hotel.name,
+      description: hotel.description,
+      default_price_data: {
+        currency: "usd",
+        unit_amount: Math.round(hotel.price * 100), // Stripe reqire price by cents Convert to cents
+      }
+    });
+
+    // Create the hotel with the Stripe price ID
     const hoteldata = await Hotel.create({
-      name: hotel.data.name,
-      location: hotel.data.location,
-      image: hotel.data.image,
-      price: Number(hotel.data.price),
-      description: hotel.data.description,
+      name: hotel.name,
+      location: hotel.location,
+      image: hotel.image,
+      price: Number(hotel.price),
+      description: hotel.description,
+      stripePriceId: stripeProduct.default_price,
     });
 
     // Return the response
