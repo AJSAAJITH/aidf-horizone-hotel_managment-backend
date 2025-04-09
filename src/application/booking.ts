@@ -90,3 +90,12 @@ export const getBookingById = async (
     next(error);
   }
 }
+
+export const deleteAllBooking = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await Booking.deleteMany({});
+    res.status(200).json({ message: "All bookings deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : error });
+  }
+}

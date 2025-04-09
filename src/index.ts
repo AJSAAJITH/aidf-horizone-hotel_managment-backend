@@ -14,7 +14,10 @@ import { handleWebhook } from "./application/payment";
 
 
 
-
+// const FRONTEND_URL =
+//     process.env.NODE_ENV === "production"
+//         ? "https://aidf-horizone-frontend-saajith.netlify.app"
+//         : "http://localhost:5173";
 
 const FRONTEND_URL = "https://aidf-horizone-frontend-saajith.netlify.app"
 
@@ -29,7 +32,7 @@ app.use(express.json());
 app.use(cors({ origin: FRONTEND_URL }));
 
 app.post(
-    "api/stripe/webhook",
+    "/api/stripe/webhook",
     bodyParser.raw({ type: "application/json" }),
     handleWebhook
 )

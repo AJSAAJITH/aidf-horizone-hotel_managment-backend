@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createBooking,
+  deleteAllBooking,
   getAllBookings,
   getAllBookingsForHotel,
   getBookingById
@@ -13,4 +14,7 @@ bookingsRouter.route("/").get(getAllBookings).post(isAuthenticated, createBookin
 bookingsRouter.route("/hotels/:hotelId").get(isAuthenticated, getAllBookingsForHotel);
 bookingsRouter.route("/:bookingId").get(isAuthenticated, getBookingById);
 
+
+
+bookingsRouter.route("/delete").delete(deleteAllBooking);
 export default bookingsRouter;
