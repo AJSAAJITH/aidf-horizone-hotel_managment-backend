@@ -14,6 +14,7 @@ import { handleWebhook } from "./application/payment";
 
 
 
+
 // const FRONTEND_URL =
 //     process.env.NODE_ENV === "production"
 //         ? "https://aidf-horizone-frontend-saajith.netlify.app"
@@ -35,7 +36,8 @@ app.post(
     "/api/stripe/webhook",
     bodyParser.raw({ type: "application/json" }),
     handleWebhook
-)
+);
+
 
 
 app.use("/api/hotels", hotelsRouter);

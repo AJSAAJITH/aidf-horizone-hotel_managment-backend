@@ -3,6 +3,7 @@ import Booking from "../infrastructure/schemas/Booking";
 import Hotel from "../infrastructure/schemas/Hotel";
 import stripe from "../infrastructure/stripe";
 import { console } from "inspector";
+import Stripe from "stripe";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 const FRONTEND_URL =
@@ -10,47 +11,71 @@ const FRONTEND_URL =
         ? "https://aidf-horizone-frontend-saajith.netlify.app"
         : "http://localhost:5173";
 
-async function fillCheckoutSession(sessionId: string) {
-    console.log("Filling checkout session with ID:", sessionId);
+// async function fillCheckoutSession(sessionId: string) {
+//     console.log("Filling checkout session with ID:", sessionId);
 
-    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
-        expand: ['line_items'],
-    });
+//     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
+//         expand: ['line_items'],
+//     });
 
-    if (!checkoutSession.metadata || !checkoutSession.metadata.bookingId) {
+//     if (!checkoutSession.metadata || !checkoutSession.metadata.bookingId) {
+//         throw new Error("Missing metadata or bookingId in checkout session.");
+//     }
+
+//     const booking = await Booking.findById(checkoutSession.metadata.bookingId);
+//     if (!booking) {
+//         throw new Error("Booking not found.");
+//     }
+
+//     // Check the Checkout Session's payment_status property
+//     // to determine if fulfillment should be peformed
+//     if (checkoutSession.payment_status !== 'unpaid') {
+//         // TODO: Perform fulfillment of the line items
+//         // TODO: Record/save fulfillment status for this
+//         // Checkout Session
+//         await Booking.findByIdAndUpdate(booking._id, {
+//             paymentStatus: "PAID",
+//         })
+//     }
+
+// }
+
+async function fillCheckoutSession(session: Stripe.Checkout.Session) {
+    console.log("Filling checkout session:", session.id);
+
+    if (!session.metadata || !session.metadata.bookingId) {
         throw new Error("Missing metadata or bookingId in checkout session.");
     }
 
-    const booking = await Booking.findById(checkoutSession.metadata.bookingId);
+    const booking = await Booking.findById(session.metadata.bookingId);
     if (!booking) {
         throw new Error("Booking not found.");
     }
 
-    // Check the Checkout Session's payment_status property
-    // to determine if fulfillment should be peformed
-    if (checkoutSession.payment_status !== 'unpaid') {
-        // TODO: Perform fulfillment of the line items
-        // TODO: Record/save fulfillment status for this
-        // Checkout Session
+    if (session.payment_status === 'paid') {
         await Booking.findByIdAndUpdate(booking._id, {
             paymentStatus: "PAID",
-        })
+        });
+        console.log("Booking payment status updated to PAID");
+    } else {
+        console.log("Payment status not PAID yet. Skipping update.");
     }
-
 }
 
 export const handleWebhook = async (req: Request, res: Response) => {
+    console.log("Webhook is working");
     const payload = req.body;
     const sig = req.headers["stripe-signature"] as string;
 
     let event;
     try {
         event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+        const session = event.data.object as Stripe.Checkout.Session;
         if (
             event.type === "checkout.session.completed" ||
             event.type === "checkout.session.async_payment_succeeded"
         ) {
-            await fillCheckoutSession(event.data.object.id);
+            await fillCheckoutSession(session);
 
             res.status(200).send();
             return;
